@@ -9,16 +9,16 @@
   --bg:#f3f7f2; --card:#ffffff; --ink:#10261a; --muted:#587062; --line:#d6e2d8;
   --forest:#1f5a3a; --lime:#a6e22e; --dark:#0d3b26;
   --ok:#1f8a4c; --warn:#b7791f; --bad:#c0392b;
-  --okbg:#e2f4e8; --warnbg:#fbf0d9; --badbg:#fbe4e1;
+  --okbg:#e2f4e8; --warnbg:#fbf0d9; --badbg:#fbe4e1; --zone:#cfe9d6;
 }
 @media (prefers-color-scheme:dark){
   :root{ --bg:#0b1a12; --card:#12271b; --ink:#e6f1e8; --muted:#92ab9a; --line:#244433; --forest:#6fcf97; --lime:#b6f04a; --dark:#06130c;
-    --ok:#6fcf97; --warn:#f0b954; --bad:#ff8a7a; --okbg:#143524; --warnbg:#3a2f12; --badbg:#3e1a16; }
+    --ok:#6fcf97; --warn:#f0b954; --bad:#ff8a7a; --okbg:#143524; --warnbg:#3a2f12; --badbg:#3e1a16; --zone:#1d4a31; }
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
 .wrap{max-width:640px;margin:0 auto;padding:0 16px 56px}
-header{background:var(--dark);color:#eaf6ec;padding:28px 16px 22px;margin:0 0 16px}
+header{background:var(--dark);color:#eaf6ec;padding:calc(24px + env(safe-area-inset-top,0px)) 16px 20px;margin:0 0 16px}
 header .in{max-width:640px;margin:0 auto}
 header h1{margin:0 0 4px;font-size:1.5rem;letter-spacing:-.01em}
 header p{margin:0;color:#a9c9b4;font-size:.95rem}
@@ -28,39 +28,70 @@ header b{color:var(--lime)}
 .tabs button[aria-selected=true]{background:var(--forest);border-color:var(--forest);color:#fff}
 @media (prefers-color-scheme:dark){.tabs button[aria-selected=true]{color:#06130c}}
 form{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
-input[type=text]{width:100%;padding:14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
-input:focus,button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+input[type=text],textarea{width:100%;padding:14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+input:focus,textarea:focus,button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
 .go{padding:14px;border:0;border-radius:10px;background:var(--lime);color:#10261a;font:inherit;font-weight:700}
 .go[disabled]{opacity:.6}
 .hint{color:var(--muted);font-size:.85rem;margin:2px 0 14px}
+a{color:var(--forest)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px}
 .card h2{margin:0 0 10px;font-size:1.05rem}
-.scores{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.score{text-align:center}
-.ring{width:100%;aspect-ratio:1;max-width:76px;margin:0 auto 4px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.15rem;font-variant-numeric:tabular-nums}
-.ring.ok{background:var(--okbg);color:var(--ok)} .ring.warn{background:var(--warnbg);color:var(--warn)} .ring.bad{background:var(--badbg);color:var(--bad)} .ring.na{background:var(--line);color:var(--muted)}
-.score small{color:var(--muted);font-size:.72rem;display:block}
+.card h3{margin:14px 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.gauges{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
+.gauge small{display:block;color:var(--muted);font-size:.72rem;margin-top:-2px}
+.gauge svg{max-width:100%;height:auto}
+.big{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.big .num{font-size:2.4rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.big small{color:var(--muted);display:block}
+.stack{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--line);margin:10px 0 6px}
+.stack i{display:block;height:100%}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.legend b{color:var(--ink)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
 .row{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
-.row:first-of-type{border-top:0}
-.chip{flex:none;min-width:54px;text-align:center;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:4px 6px;border-radius:6px;margin-top:2px}
+.row.first{border-top:0}
+.chip{flex:none;min-width:56px;text-align:center;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:4px 6px;border-radius:6px;margin-top:2px}
 .chip.ok{background:var(--okbg);color:var(--ok)} .chip.warn{background:var(--warnbg);color:var(--warn)} .chip.bad{background:var(--badbg);color:var(--bad)} .chip.info{background:var(--line);color:var(--muted)}
 .row .t{min-width:0;flex:1}
 .row .t b{display:block;font-size:.95rem}
-.row .t span{color:var(--muted);font-size:.88rem;overflow-wrap:anywhere}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.row .t .d{color:var(--muted);font-size:.88rem;overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .tag{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.82rem}
+.tag.on{background:var(--okbg);border-color:transparent;color:var(--ok)}
+.tag.off{background:var(--badbg);border-color:transparent;color:var(--bad);text-decoration:line-through}
 .err{background:var(--badbg);color:var(--bad);border-radius:10px;padding:12px;margin:10px 0}
+.note{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:12px;margin:6px 0}
 .btns{display:flex;flex-wrap:wrap;gap:8px}
 .btn{display:inline-block;padding:11px 14px;border-radius:10px;border:1.5px solid var(--forest);color:var(--forest);background:transparent;font:inherit;font-weight:600;text-decoration:none}
 .btn.fill{background:var(--forest);color:#fff}
 @media (prefers-color-scheme:dark){.btn.fill{color:#06130c}}
 details{margin-top:8px} summary{cursor:pointer;color:var(--forest);font-weight:600}
 pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:.8rem;margin:8px 0 0}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;margin:0 -2px}
+.filters button{flex:none;padding:8px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:.9rem;font-weight:600}
+.filters button[aria-pressed=true]{background:var(--forest);border-color:var(--forest);color:#fff}
+@media (prefers-color-scheme:dark){.filters button[aria-pressed=true]{color:#06130c}}
+.meter{position:relative;height:10px;border-radius:99px;background:var(--line);margin:8px 0 2px}
+.meter .zone{position:absolute;top:0;bottom:0;background:var(--zone);border-radius:99px}
+.meter .mk{position:absolute;top:-4px;width:6px;height:18px;border-radius:3px;margin-left:-3px;background:var(--ink)}
+.scale{display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted)}
+.kw{display:grid;grid-template-columns:minmax(0,1fr) 36px;gap:2px 8px;align-items:center;margin-top:6px;font-size:.85rem}
+.kw .bar{height:8px;border-radius:99px;background:var(--forest);grid-column:1}
+.kw .lab{grid-column:1;overflow-wrap:anywhere}
+.kw .n{grid-row:span 2;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.tree{margin-top:6px;font-size:.85rem}
+.tree div{display:flex;gap:6px;padding:2px 0;min-width:0}
+.tree em{flex:none;font-style:normal;font-weight:800;font-size:.68rem;padding:1px 5px;border-radius:4px;background:var(--forest);color:#fff;height:fit-content;margin-top:3px}
+@media (prefers-color-scheme:dark){.tree em{color:#06130c}}
+.tree span{min-width:0;overflow-wrap:anywhere}
+.schemaCard{border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:8px}
+.schemaCard b{font-size:.9rem}
 .check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
-.check:first-of-type{border-top:0}
+.check.first{border-top:0}
 .check input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--forest)}
 .check label{min-width:0}
 .check small{display:block;color:var(--muted)}
+.field{display:block;margin:8px 0 4px;font-weight:600;font-size:.9rem}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -81,7 +112,13 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px 
       <input type="text" id="siteUrl" inputmode="url" autocapitalize="off" autocorrect="off" placeholder="example.com" aria-label="Website address">
       <button class="go" id="siteGo" type="submit">Audit website</button>
     </form>
-    <p class="hint">Reads the page, robots.txt and sitemap, then runs Google PageSpeed on mobile. Speed takes 15 to 40 seconds.</p>
+    <details id="keyBox">
+      <summary>Speed test key (free, optional)</summary>
+      <p class="hint">Google's shared free speed limit runs out often. A free key of your own removes that. On a computer or in desktop mode: console.cloud.google.com, create a project, enable "PageSpeed Insights API", then Credentials, Create API key. Paste it here.</p>
+      <input type="text" id="psiKey" autocapitalize="off" autocorrect="off" placeholder="Paste key (starts with AIza)" aria-label="PageSpeed API key">
+      <div class="btns" style="margin-top:8px"><button class="btn" id="keySave" type="button">Save key</button><span id="keyMsg" class="hint" style="margin:0;align-self:center"></span></div>
+    </details>
+    <p class="hint">Reads the page, robots.txt and sitemap, then runs Google PageSpeed on mobile (15 to 40 seconds).</p>
     <div id="siteOut"></div>
   </section>
 
@@ -90,7 +127,7 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px 
       <input type="text" id="gbpUrl" inputmode="url" autocapitalize="off" autocorrect="off" placeholder="Paste the Google Maps / Business Profile link" aria-label="Business Profile link">
       <button class="go" id="gbpGo" type="submit">Open profile review</button>
     </form>
-    <p class="hint">Google does not give free access to profile data, so this reads the business name from the link and gives you a checklist to tick while the profile is open.</p>
+    <p class="hint">Google gives no free profile data, so this reads the name from your link and gives you a checklist to tick while the profile is open.</p>
     <div id="gbpOut"></div>
   </section>
 </div>
@@ -99,8 +136,39 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px 
 <script>
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-let lastSummary = "";
+const strip = (h) => String(h).replace(/<br\s*\/?>/gi, "; ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 
+/* ---------- open links outside the app ---------- */
+const BrowserP = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser;
+function openExt(url) {
+  try { if (BrowserP) { BrowserP.open({ url }); return; } } catch {}
+  window.open(url, "_blank");
+}
+document.addEventListener("click", (e) => {
+  const a = e.target.closest("a[href]");
+  if (a && /^https?:/i.test(a.getAttribute("href"))) { e.preventDefault(); openExt(a.href); }
+});
+
+/* ---------- copy ---------- */
+async function copyText(txt, btn, label) {
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch {}
+  if (!ok) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select(); ok = document.execCommand("copy"); ta.remove();
+    } catch {}
+  }
+  if (ok) { btn.textContent = "Copied"; }
+  else {
+    btn.textContent = "Press and hold the text below to copy";
+    if (!btn.nextElementSibling || btn.nextElementSibling.tagName !== "PRE") { const pre = document.createElement("pre"); pre.textContent = txt; btn.parentElement.after(pre); }
+  }
+  setTimeout(() => (btn.textContent = label), 2500);
+}
+
+/* ---------- tabs ---------- */
 function showTab(site) {
   $("#siteView").hidden = !site; $("#gbpView").hidden = site;
   $("#tabSite").setAttribute("aria-selected", site); $("#tabGbp").setAttribute("aria-selected", !site);
@@ -108,98 +176,200 @@ function showTab(site) {
 $("#tabSite").onclick = () => showTab(true);
 $("#tabGbp").onclick = () => showTab(false);
 
-const row = (lvl, title, detail) =>
-  `<div class="row"><span class="chip ${lvl}">${{ ok: "Good", warn: "Fix", bad: "Missing", info: "Info" }[lvl]}</span><div class="t"><b>${esc(title)}</b><span>${detail}</span></div></div>`;
-const cls = (n) => (n >= 90 ? "ok" : n >= 50 ? "warn" : "bad");
+/* ---------- PageSpeed key ---------- */
+try { $("#psiKey").value = localStorage.getItem("psiKey") || ""; } catch {}
+$("#keySave").onclick = () => {
+  try { localStorage.setItem("psiKey", $("#psiKey").value.trim()); $("#keyMsg").textContent = "Saved"; } catch { $("#keyMsg").textContent = "Could not save"; }
+};
+
+/* ---------- visual pieces ---------- */
+const col = (p) => (p >= 80 ? "var(--ok)" : p >= 50 ? "var(--warn)" : "var(--bad)");
+const gauge = (pct, label, size = 64) => {
+  const r = 26, c = 2 * Math.PI * r;
+  return `<div class="gauge"><svg viewBox="0 0 64 64" width="${size}" height="${size}" role="img" aria-label="${esc(label)} ${pct}"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--line)" stroke-width="7"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="${col(pct)}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(c * pct / 100).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 32 32)"/><text x="32" y="37" text-anchor="middle" font-size="16" font-weight="800" fill="var(--ink)">${pct}</text></svg><small>${esc(label)}</small></div>`;
+};
+const meter = (v, lo, hi, max) =>
+  `<div class="meter"><div class="zone" style="left:${lo / max * 100}%;width:${(hi - lo) / max * 100}%"></div><div class="mk" style="left:${Math.min(v, max) / max * 100}%"></div></div><div class="scale"><span>0</span><span>ideal ${lo} to ${hi}</span><span>${max}+</span></div>`;
+const kwBars = (arr) => {
+  if (!arr.length) return "";
+  const m = Math.max(...arr.map((k) => k.count));
+  return `<div class="kw">${arr.map((k) => `<span class="lab">${esc(k.term)}</span><span class="n" style="grid-row:span 2">${k.count}</span><span class="bar" style="width:${Math.max(6, k.count / m * 100)}%"></span>`).join("")}</div>`;
+};
+const FIELD_LABEL = { name: "Name", url: "URL", phone: "Phone", address: "Address", hours: "Hours", geo: "Map point", sameAs: "Profiles", rating: "Rating", image: "Image", price: "Price" };
+
+/* ---------- state ---------- */
+let S = null; // { d, items, psi }
+
+const CATS = [["onpage", "On-page"], ["technical", "Technical"], ["schema", "Schema"], ["offpage", "Off-page"]];
+const lvlLabel = { ok: "Good", warn: "Fix", bad: "Missing", info: "Info" };
+const rowHtml = (it, first) => `<div class="row${first ? " first" : ""}"><span class="chip ${it.lvl}">${lvlLabel[it.lvl]}</span><div class="t"><b>${esc(it.title)}</b><div class="d">${it.html}</div></div></div>`;
+
+function catScore(items, cat) {
+  const l = items.filter((i) => i.cat === cat && i.lvl !== "info");
+  if (!l.length) return null;
+  const pts = l.reduce((a, i) => a + (i.lvl === "ok" ? 1 : i.lvl === "warn" ? 0.5 : 0), 0);
+  return Math.round(pts / l.length * 100);
+}
+
+function buildSummary() {
+  const { d, items, psi } = S;
+  let host = d.finalUrl; try { host = new URL(d.finalUrl).hostname; } catch {}
+  const sc = {}; CATS.forEach(([k, n]) => (sc[k] = catScore(items, k)));
+  const overall = overallScore();
+  const bad = items.filter((i) => i.lvl === "bad"), warn = items.filter((i) => i.lvl === "warn"), ok = items.filter((i) => i.lvl === "ok");
+  const L = [];
+  L.push(`WEBSITE AUDIT: ${host}`);
+  L.push(`Date: ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}`);
+  L.push(`Overall ${overall}/100 | ` + CATS.filter(([k]) => sc[k] != null).map(([k, n]) => `${n} ${sc[k]}`).join(" | "));
+  if (psi) L.push(`Mobile speed ${psi.perf}/100, SEO ${psi.seo}, Accessibility ${psi.acc}. LCP ${psi.lcp}, TBT ${psi.tbt}, CLS ${psi.cls}`);
+  else L.push(`Server response ${d.server.responseMs} ms, page ${d.server.htmlKb} KB`);
+  const fix = [...bad, ...warn];
+  if (fix.length) { L.push(""); L.push("FIX FIRST"); fix.slice(0, 10).forEach((i, n) => L.push(`${n + 1}. ${i.title}: ${i.plain}`)); }
+  if (ok.length) { L.push(""); L.push("WORKING WELL"); L.push(ok.map((i) => i.title).join(", ")); }
+  return L.join("\n");
+}
+function overallScore() {
+  const v = CATS.map(([k]) => catScore(S.items, k)).filter((x) => x != null);
+  return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : 0;
+}
 
 function renderSite(d) {
-  const p = d.page, notes = [];
-  const add = (lvl, title, detail, plain) => { notes.push(row(lvl, title, detail)); lines.push(`[${lvl.toUpperCase()}] ${title}: ${plain ?? detail.replace(/<[^>]+>/g, "")}`); };
-  const lines = [`Audit of ${d.finalUrl}`];
+  const p = d.page, items = [];
+  const I = (cat, lvl, title, html, plain, sub) => items.push({ cat, lvl, title, html, plain: plain ?? strip(html), sub: sub || "" });
 
-  const A = [], B = [], C = [], D = [];
-  const target = (arr) => (lvl, t, det, plain) => { const before = notes.length; add(lvl, t, det, plain); arr.push(notes.pop()); };
-  const meta = target(A), struct = target(B), tech = target(C), schemaR = target(D);
+  /* ON-PAGE: meta */
+  if (!p.titleLen) I("onpage", "bad", "Title tag", "No title found.", "missing", "Meta and keywords");
+  else I("onpage", p.titleLen >= 30 && p.titleLen <= 60 ? "ok" : "warn", "Title tag", `${esc(p.title)}<br>${p.titleLen} characters${meter(p.titleLen, 30, 60, 80)}`, `${p.titleLen} characters, aim 30 to 60`, "Meta and keywords");
+  if (!p.description) I("onpage", "bad", "Meta description", "No meta description.", "missing", "Meta and keywords");
+  else I("onpage", p.descriptionLen >= 70 && p.descriptionLen <= 160 ? "ok" : "warn", "Meta description", `${esc(p.description)}<br>${p.descriptionLen} characters${meter(p.descriptionLen, 70, 160, 200)}`, `${p.descriptionLen} characters, aim 70 to 160`, "Meta and keywords");
+  I("onpage", "info", "Meta keywords tag", p.keywordsMeta ? esc(p.keywordsMeta) : "None. Google ignores this tag, so it is not a problem.", p.keywordsMeta || "none", "Meta and keywords");
+  const top = (p.keywords.phrases[0] || p.keywords.single[0] || {}).term;
+  const inTitle = top && p.title.toLowerCase().includes(top.split(" ")[0]);
+  I("onpage", top ? (inTitle ? "ok" : "warn") : "info", "Focus keyword (detected)",
+    top ? `Most used on the page${inTitle ? "" : ", but missing from the title"}.` + (p.keywords.phrases.length ? `<h3>Phrases</h3>${kwBars(p.keywords.phrases.slice(0, 5))}` : "") + `<h3>Words</h3>${kwBars(p.keywords.single.slice(0, 6))}` : "Not enough text to tell.",
+    top ? `${top}${inTitle ? "" : " (not in title)"}` : "n/a", "Meta and keywords");
+  I("onpage", p.canonical ? "ok" : "warn", "Canonical tag", p.canonical ? esc(p.canonical) : "Missing.", p.canonical || "missing", "Meta and keywords");
+  I("onpage", p.robotsMeta && /noindex/i.test(p.robotsMeta) ? "bad" : "ok", "Indexing tag", p.robotsMeta ? esc(p.robotsMeta) : "No blocking tag. The page can be indexed.", p.robotsMeta && /noindex/i.test(p.robotsMeta) ? "page is set to noindex" : "indexable", "Meta and keywords");
+  const ogOk = !!(p.og["og:title"] && p.og["og:image"]);
+  I("onpage", ogOk ? "ok" : "warn", "Social preview tags", `<div class="tags">${[["og:title", p.og["og:title"]], ["og:description", p.og["og:description"]], ["og:image", p.og["og:image"]], ["twitter:card", p.twitterCard]].map(([n, v]) => `<span class="tag ${v ? "on" : "off"}">${n}</span>`).join("")}</div>`, ogOk ? "present" : "og:title or og:image missing", "Meta and keywords");
 
-  // Meta
-  p.titleLen === 0 ? meta("bad", "Title tag", "No title found.") :
-    meta(p.titleLen >= 30 && p.titleLen <= 60 ? "ok" : "warn", "Title tag", `${esc(p.title)}<br>${p.titleLen} characters. Aim for 30 to 60.`, `"${p.title}" (${p.titleLen} chars, aim 30-60)`);
-  !p.description ? meta("bad", "Meta description", "No meta description.") :
-    meta(p.descriptionLen >= 70 && p.descriptionLen <= 160 ? "ok" : "warn", "Meta description", `${esc(p.description)}<br>${p.descriptionLen} characters. Aim for 70 to 160.`, `${p.descriptionLen} chars, aim 70-160`);
-  meta(p.keywordsMeta ? "info" : "info", "Meta keywords", p.keywordsMeta ? esc(p.keywordsMeta) : "None. Google ignores this tag, so it is not a problem.", p.keywordsMeta || "none (Google ignores it)");
-  const topPhrase = (p.keywords.phrases[0] || p.keywords.single[0] || {}).term;
-  const inTitle = topPhrase && p.title.toLowerCase().includes(topPhrase.split(" ")[0]);
-  meta(topPhrase ? (inTitle ? "ok" : "warn") : "info", "Likely focus keyword",
-    topPhrase ? `<div class="tags">${[...p.keywords.phrases.slice(0, 4), ...p.keywords.single.slice(0, 5)].map((k) => `<span class="tag">${esc(k.term)}</span>`).join("")}</div>${inTitle ? "" : "<br>The top term is not in the title."}` : "Not enough text to tell.",
-    topPhrase ? `top terms: ${p.keywords.phrases.slice(0, 3).concat(p.keywords.single.slice(0, 3)).map((k) => k.term).join(", ")}${inTitle ? "" : " (not in title)"}` : "n/a");
-  meta(p.canonical ? "ok" : "warn", "Canonical tag", p.canonical ? esc(p.canonical) : "Missing.", p.canonical || "missing");
-  meta(p.robotsMeta && /noindex/i.test(p.robotsMeta) ? "bad" : "ok", "Robots meta", p.robotsMeta ? esc(p.robotsMeta) : "No tag, so the page can be indexed.", p.robotsMeta || "none, indexable");
-  meta(p.og["og:title"] && p.og["og:image"] ? "ok" : "warn", "Social preview tags", `og:title ${p.og["og:title"] ? "yes" : "no"}, og:description ${p.og["og:description"] ? "yes" : "no"}, og:image ${p.og["og:image"] ? "yes" : "no"}, twitter card ${p.twitterCard ? "yes" : "no"}`);
+  /* ON-PAGE: structure */
+  const h1 = p.headings.h1;
+  I("onpage", h1 === 1 ? "ok" : h1 === 0 ? "bad" : "warn", "H1 heading", h1 === 1 ? esc(p.h1s[0]) : h1 === 0 ? "No H1 on the page." : `${h1} H1s found. Use one.`, h1 === 1 ? "one H1" : h1 === 0 ? "no H1" : `${h1} H1s, use one`, "Page structure");
+  const tree = p.headingList.length ? `<div class="tree">${p.headingList.map((h) => `<div style="padding-left:${(h.level - 1) * 16}px"><em>H${h.level}</em><span>${esc(h.text)}</span></div>`).join("")}</div>` : "";
+  I("onpage", "info", "Heading outline", `H1 ${p.headings.h1}, H2 ${p.headings.h2}, H3 ${p.headings.h3}, H4 ${p.headings.h4}${tree}`, `H1 ${p.headings.h1}, H2 ${p.headings.h2}, H3 ${p.headings.h3}`, "Page structure");
+  I("onpage", p.words >= 300 ? "ok" : "warn", "Text on the page", `About ${p.words} words.${p.words < 300 ? " Thin for a service page." : ""}`, `${p.words} words`, "Page structure");
+  I("onpage", !p.images.total || !p.images.missingAlt ? "ok" : "warn", "Images", `${p.images.total} images, ${p.images.missingAlt} without alt text, ${p.images.lazy} lazy loaded.`, `${p.images.total} images, ${p.images.missingAlt} missing alt text`, "Page structure");
+  I("onpage", p.links.internal >= 3 ? "ok" : "warn", "Links", `${p.links.internal} internal, ${p.links.external} external, ${p.links.tel} tap-to-call.`, `${p.links.internal} internal, ${p.links.external} external, ${p.links.tel} tap-to-call`, "Page structure");
+  I("onpage", p.nap.phone && p.nap.address ? "ok" : "warn", "Phone and address on page", `Phone ${p.nap.phone ? "found" : "not found"}, address ${p.nap.address ? "found" : "not found"}. Must match the Business Profile exactly.`, `phone ${p.nap.phone ? "yes" : "no"}, address ${p.nap.address ? "yes" : "no"}`, "Page structure");
 
-  // Structure
-  struct(p.headings.h1 === 1 ? "ok" : p.headings.h1 === 0 ? "bad" : "warn", "H1 heading", p.headings.h1 === 1 ? esc(p.h1s[0]) : p.headings.h1 === 0 ? "No H1 on the page." : `${p.headings.h1} H1s found. Use one.`, `${p.headings.h1} H1`);
-  struct("info", "Heading counts", `H1 ${p.headings.h1}, H2 ${p.headings.h2}, H3 ${p.headings.h3}, H4 ${p.headings.h4}`);
-  if (p.headingList.length) struct("info", "Outline", p.headingList.map((h) => `${h.level === 2 ? "&nbsp;&nbsp;&nbsp;" : ""}H${h.level} ${esc(h.text)}`).join("<br>"), "see page outline");
-  struct(p.words >= 300 ? "ok" : "warn", "Text on page", `About ${p.words} words. ${p.words < 300 ? "Thin for a service page." : ""}`, `${p.words} words`);
-  struct(p.images.total && p.images.missingAlt ? "warn" : "ok", "Images", `${p.images.total} images, ${p.images.missingAlt} without alt text, ${p.images.lazy} lazy loaded.`, `${p.images.total} imgs, ${p.images.missingAlt} missing alt`);
-  struct(p.links.internal >= 3 ? "ok" : "warn", "Links", `${p.links.internal} internal, ${p.links.external} external. Tap-to-call links: ${p.links.tel}.`, `${p.links.internal} internal, ${p.links.external} external, ${p.links.tel} tel links`);
-  struct(p.nap.phone && p.nap.address ? "ok" : "warn", "Phone and address on page", `Phone ${p.nap.phone ? "found" : "not found"}, address wording ${p.nap.address ? "found" : "not found"}. Should match the Business Profile exactly.`, `phone ${p.nap.phone ? "yes" : "no"}, address ${p.nap.address ? "yes" : "no"}`);
+  /* TECHNICAL */
+  I("technical", d.https ? "ok" : "bad", "HTTPS", d.https ? "Site uses HTTPS." : "Site is not on HTTPS.", d.https ? "yes" : "no");
+  if (d.httpRedirectsToHttps !== null) I("technical", d.httpRedirectsToHttps ? "ok" : "warn", "HTTP to HTTPS redirect", d.httpRedirectsToHttps ? "Redirects correctly." : "The http:// version does not redirect to https://.", d.httpRedirectsToHttps ? "yes" : "no redirect");
+  I("technical", p.viewport ? "ok" : "bad", "Mobile viewport", p.viewport ? esc(p.viewport) : "No viewport tag. The page will not scale on phones.", p.viewport ? "present" : "missing");
+  I("technical", p.lang ? "ok" : "warn", "Language attribute", p.lang ? esc(p.lang) : "No lang on the html tag.", p.lang || "missing");
+  I("technical", p.favicon ? "ok" : "warn", "Favicon", p.favicon ? "Found." : "Not found.", p.favicon ? "yes" : "missing");
+  const ms = d.server.responseMs;
+  I("technical", ms < 1000 ? "ok" : ms < 2500 ? "warn" : "bad", "Server response", `${ms} ms to get the page, ${d.server.htmlKb} KB of HTML.${meter(Math.min(ms, 4000), 0, 1000, 4000)}`, `${ms} ms, ${d.server.htmlKb} KB of HTML`);
+  I("technical", d.robots.found ? (d.robots.disallowAll ? "bad" : "ok") : "warn", "robots.txt",
+    d.robots.found ? (d.robots.disallowAll ? "Blocks all crawlers." : `Found. ${d.robots.disallows} disallow rules, ${d.robots.sitemaps.length} sitemap line${d.robots.sitemaps.length === 1 ? "" : "s"}.`) + `<details><summary>View file</summary><pre>${esc((d.robots.preview || []).join("\n"))}</pre></details>` : `Not readable (HTTP ${d.robots.status || "no answer"}). It may be blocked for apps, so check it in a browser.`,
+    d.robots.found ? (d.robots.disallowAll ? "blocks all crawlers" : "found") : `not readable (HTTP ${d.robots.status || "no answer"})`);
+  I("technical", d.sitemap.found ? "ok" : "warn", "Sitemap",
+    d.sitemap.found ? `${esc(d.sitemap.url)}<br>${d.sitemap.urls} entries${d.sitemap.index ? " (index of sitemaps)" : ""}.` : `Not found at the usual addresses (last answer HTTP ${d.sitemap.status || "none"}).`,
+    d.sitemap.found ? `found, ${d.sitemap.urls} entries` : "not found at usual addresses");
 
-  // Technical
-  tech(d.https ? "ok" : "bad", "HTTPS", d.https ? "Site uses HTTPS." : "Site is not on HTTPS.");
-  if (d.httpRedirectsToHttps !== null) tech(d.httpRedirectsToHttps ? "ok" : "warn", "HTTP to HTTPS redirect", d.httpRedirectsToHttps ? "Redirects correctly." : "http:// version does not redirect to https://.");
-  tech(p.viewport ? "ok" : "bad", "Mobile viewport", p.viewport ? esc(p.viewport) : "No viewport tag. The page will not scale on phones.");
-  tech(p.lang ? "ok" : "warn", "Language attribute", p.lang ? esc(p.lang) : "No lang on the html tag.");
-  tech(p.favicon ? "ok" : "warn", "Favicon", p.favicon ? "Found." : "Not found.");
-  tech(d.server.responseMs < 800 ? "ok" : d.server.responseMs < 1800 ? "warn" : "bad", "Server response", `${d.server.responseMs} ms to get the page, ${d.server.htmlKb} KB of HTML, ${d.server.compressed ? "compressed" : "not compressed"}.`, `${d.server.responseMs} ms, ${d.server.htmlKb} KB html`);
-  tech(d.robots.found ? (d.robots.disallowAll ? "bad" : "ok") : "warn", "robots.txt", d.robots.found ? (d.robots.disallowAll ? "Blocks all crawlers." : `Found. ${d.robots.disallows} disallow rules.`) + `<details><summary>View file</summary><pre>${esc((d.robots.preview || []).join("\n"))}</pre></details>` : "Not found.", d.robots.found ? "found" : "missing");
-  tech(d.sitemap.found || (d.robots.sitemaps || []).length ? "ok" : "warn", "Sitemap", d.sitemap.found ? `${d.sitemap.url} (${d.sitemap.urls} entries)` : (d.robots.sitemaps || []).length ? esc(d.robots.sitemaps[0]) : "No sitemap.xml found.", d.sitemap.found ? `found, ${d.sitemap.urls} entries` : "missing");
+  /* SCHEMA */
+  const s = p.schema;
+  const hasAny = s.blocks > 0 || s.microdata;
+  I("schema", hasAny ? "ok" : "bad", "Structured data", hasAny ? `${s.blocks} JSON-LD block${s.blocks === 1 ? "" : "s"}${s.microdata ? " plus microdata" : ""}.${s.invalid ? ` ${s.invalid} could not be parsed.` : ""}<div class="tags">${s.types.map((t) => `<span class="tag on">${esc(t)}</span>`).join("")}</div>` : "No schema markup found.", hasAny ? "types: " + (s.types.join(", ") || "microdata only") : "none found");
+  const localRe = /Business|Contractor|Plumber|Electrician|Restaurant|Store|Organization|Service|Dentist|Physician|Attorney|Salon|Hotel/i;
+  const hasLocal = s.types.some((t) => localRe.test(t));
+  I("schema", hasLocal ? "ok" : "warn", "Local business schema", hasLocal ? "A business type is present." : "No LocalBusiness or similar type. A strong proposal point.", hasLocal ? "present" : "missing");
+  I("schema", s.types.includes("FAQPage") ? "ok" : "info", "FAQ schema", s.types.includes("FAQPage") ? "Present." : "Not present.");
 
-  // Schema
-  const s = p.schema, localTypes = ["LocalBusiness", "Organization", "Plumber", "Electrician", "HVACBusiness", "HomeAndConstructionBusiness", "RoofingContractor", "GeneralContractor", "ProfessionalService", "Store", "Service"];
-  const hasLocal = s.types.some((t) => localTypes.includes(t) || /Business|Contractor/.test(t));
-  schemaR(s.blocks || s.microdata ? "ok" : "bad", "Structured data", s.blocks || s.microdata ? `${s.blocks} JSON-LD block${s.blocks === 1 ? "" : "s"}${s.microdata ? " plus microdata" : ""}. ${s.invalid ? s.invalid + " could not be parsed." : ""}<div class="tags">${s.types.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : "No schema markup found.", s.types.length ? "types: " + s.types.join(", ") : "none");
-  schemaR(hasLocal ? "ok" : "warn", "Local business schema", hasLocal ? "A business type is present." : "No LocalBusiness or similar type. A strong proposal point for a local specialist.", hasLocal ? "present" : "missing");
-  schemaR(s.types.includes("FAQPage") ? "ok" : "info", "FAQ schema", s.types.includes("FAQPage") ? "Present." : "Not present.");
-  schemaR("info", "Validate", `<a href="https://search.google.com/test/rich-results?url=${encodeURIComponent(d.finalUrl)}" target="_blank" rel="noopener">Open Rich Results Test for this page</a>`, "run Rich Results Test");
+  /* OFF-PAGE (what the site shows about itself) */
+  I("offpage", p.social.length >= 2 ? "ok" : p.social.length ? "warn" : "bad", "Social profiles linked", p.social.length ? `<div class="tags">${p.social.map((n) => `<span class="tag on">${esc(n)}</span>`).join("")}</div>` : "No social profile links found.", p.social.length ? p.social.join(", ") : "none linked");
+  I("offpage", p.sameAsCount ? "ok" : "warn", "Profiles named in schema (sameAs)", p.sameAsCount ? `${p.sameAsCount} linked.` : "None. Adding them ties the site to its profiles.", p.sameAsCount ? `${p.sameAsCount} linked` : "none");
+  I("offpage", p.mapsEmbed || p.mapsLink ? "ok" : "warn", "Google Maps on the site", p.mapsEmbed ? "Map is embedded." : p.mapsLink ? "A Google Maps link is present." : "No Google Maps link or embed.", p.mapsEmbed ? "map embedded" : p.mapsLink ? "maps link present" : "no maps link or embed");
+
+  S = { d, items, psi: null };
+  let host = d.finalUrl; try { host = new URL(d.finalUrl).hostname; } catch {}
+  const ov = overallScore();
+  const n = { ok: items.filter((i) => i.lvl === "ok").length, warn: items.filter((i) => i.lvl === "warn").length, bad: items.filter((i) => i.lvl === "bad").length };
+  const tot = n.ok + n.warn + n.bad || 1;
+  const fixList = items.filter((i) => i.lvl === "bad" || i.lvl === "warn").slice(0, 6);
+
+  const section = (cat, title, extra = "") => {
+    const list = items.filter((i) => i.cat === cat);
+    if (!list.length) return "";
+    let html = "", sub = null, first = true;
+    list.forEach((i) => {
+      if (i.sub && i.sub !== sub) { html += `<h3>${esc(i.sub)}</h3>`; sub = i.sub; first = true; }
+      html += rowHtml(i, first); first = false;
+    });
+    return `<div class="card" data-cat="${cat}"><h2>${title}</h2>${html}${extra}</div>`;
+  };
+
+  const schemaVisual = s.items.length ? s.items.map((it) => `<div class="schemaCard"><b>${esc(it.type)}</b><div class="tags">${Object.entries(it.fields).map(([k, v]) => `<span class="tag ${v ? "on" : "off"}">${FIELD_LABEL[k]}</span>`).join("")}</div></div>`).join("") : "";
+  const q = encodeURIComponent(host);
+  const schemaLinks = `<div class="btns" style="margin-top:12px"><a class="btn" href="https://validator.schema.org/#url=${encodeURIComponent(d.finalUrl)}">Schema validator</a><a class="btn" href="https://search.google.com/test/rich-results">Rich Results Test</a></div><p class="hint">In the Rich Results Test, paste: ${esc(d.finalUrl)}</p>`;
+  const offLinks = `<h3>Free checks (open in browser)</h3><div class="btns"><a class="btn" href="https://ahrefs.com/backlink-checker/?input=${q}&mode=subdomains">Backlinks</a><a class="btn" href="https://www.google.com/search?q=site%3A${q}">Indexed pages</a><a class="btn" href="https://www.google.com/search?q=%22${q}%22+-site%3A${q}">Mentions</a></div>`;
 
   $("#siteOut").innerHTML = `
-    <div class="card"><h2>Speed (mobile, Google PageSpeed)</h2><div id="psi"><p class="hint">Running. Keep this tab open.</p></div></div>
-    <div class="card"><h2>Meta and keywords</h2>${A.join("")}</div>
-    <div class="card"><h2>Page structure</h2>${B.join("")}</div>
-    <div class="card"><h2>Schema</h2>${D.join("")}</div>
-    <div class="card"><h2>Technical</h2>${C.join("")}</div>
-    <div class="btns"><button class="btn fill" id="copyBtn">Copy summary</button></div>`;
-  lastSummary = lines.join("\n");
-  $("#copyBtn").onclick = copySummary;
+    <div class="card" data-cat="all"><h2>Quick summary</h2>
+      <div class="big"><div class="num" style="color:${col(ov)}">${ov}</div><div><b>Overall score</b><small>${esc(host)}</small></div></div>
+      <div class="gauges">${CATS.map(([k, nm]) => { const v = catScore(items, k); return v == null ? "" : gauge(v, nm); }).join("")}</div>
+      <div class="stack"><i style="width:${n.ok / tot * 100}%;background:var(--ok)"></i><i style="width:${n.warn / tot * 100}%;background:var(--warn)"></i><i style="width:${n.bad / tot * 100}%;background:var(--bad)"></i></div>
+      <div class="legend"><span><i class="dot" style="background:var(--ok)"></i><b>${n.ok}</b> good</span><span><i class="dot" style="background:var(--warn)"></i><b>${n.warn}</b> to fix</span><span><i class="dot" style="background:var(--bad)"></i><b>${n.bad}</b> missing</span></div>
+      ${fixList.length ? `<h3>Fix first</h3>${fixList.map((i, k) => rowHtml({ ...i, html: esc(i.plain) }, k === 0)).join("")}` : ""}
+      <div class="btns" style="margin-top:12px"><button class="btn fill" id="copyBtn" type="button">Copy summary</button></div>
+    </div>
+    <div class="filters" role="group" aria-label="Filter">
+      <button type="button" data-f="all" aria-pressed="true">All</button>${CATS.map(([k, nm]) => `<button type="button" data-f="${k}" aria-pressed="false">${nm}</button>`).join("")}
+    </div>
+    <div class="card" data-cat="technical"><h2>Speed (mobile, Google PageSpeed)</h2><div id="psi"><p class="hint">Running. Keep the app open.</p></div></div>
+    ${section("onpage", "On-page")}
+    ${section("technical", "Technical")}
+    ${section("schema", "Schema", schemaVisual + schemaLinks)}
+    ${section("offpage", "Off-page", offLinks)}`;
+
+  $("#copyBtn").onclick = () => copyText(buildSummary(), $("#copyBtn"), "Copy summary");
+  document.querySelectorAll(".filters button").forEach((b) => (b.onclick = () => {
+    document.querySelectorAll(".filters button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    const f = b.dataset.f;
+    document.querySelectorAll("#siteOut .card").forEach((c) => (c.hidden = !(f === "all" || c.dataset.cat === "all" || c.dataset.cat === f)));
+    document.querySelectorAll("#siteOut .card[data-cat=all]").forEach((c) => (c.hidden = f !== "all"));
+  }));
 }
 
-async function copySummary() {
-  const b = $("#copyBtn");
-  try { await navigator.clipboard.writeText(lastSummary); b.textContent = "Copied"; }
-  catch { const pre = document.createElement("pre"); pre.textContent = lastSummary; b.after(pre); b.textContent = "Select the text below"; }
-  setTimeout(() => (b.textContent = "Copy summary"), 2500);
-}
-
+/* ---------- PageSpeed ---------- */
 async function runPsi(url) {
   const box = $("#psi");
-  const q = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&category=performance&category=seo&category=accessibility&category=best-practices&url=" + encodeURIComponent(url);
+  let key = ""; try { key = localStorage.getItem("psiKey") || ""; } catch {}
+  const q = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&category=performance&category=seo&category=accessibility&category=best-practices&url=" + encodeURIComponent(url) + (key ? "&key=" + encodeURIComponent(key) : "");
+  const web = "https://pagespeed.web.dev/analysis?form_factor=mobile&url=" + encodeURIComponent(url);
   try {
-    const r = await fetch(q);
-    const j = await r.json();
-    if (!r.ok) throw new Error(j.error?.message || "PageSpeed request failed");
+    const r = await http(q, 90000);
+    let j = {}; try { j = JSON.parse(r.text); } catch {}
+    if (!r.ok || j.error) {
+      const msg = (j.error && j.error.message) || "";
+      const quota = /quota|limit|429/i.test(msg) || r.status === 429;
+      throw new Error(quota ? "quota" : msg || "PageSpeed did not answer (HTTP " + r.status + ")");
+    }
     const c = j.lighthouseResult.categories, a = j.lighthouseResult.audits;
-    const sc = (k) => Math.round((c[k]?.score ?? 0) * 100);
-    const ring = (n, l) => `<div class="score"><div class="ring ${cls(n)}">${n}</div><small>${l}</small></div>`;
-    const m = (id, l) => a[id] ? `<div class="row"><span class="chip ${a[id].score >= .9 ? "ok" : a[id].score >= .5 ? "warn" : "bad"}">${a[id].score >= .9 ? "Good" : a[id].score >= .5 ? "Fix" : "Slow"}</span><div class="t"><b>${l}</b><span>${esc(a[id].displayValue || "")}</span></div></div>` : "";
-    const opps = Object.values(a).filter((x) => x.details?.type === "opportunity" && x.details.overallSavingsMs > 300).sort((x, y) => y.details.overallSavingsMs - x.details.overallSavingsMs).slice(0, 4);
-    box.innerHTML = `<div class="scores">${ring(sc("performance"), "Speed")}${ring(sc("seo"), "SEO")}${ring(sc("accessibility"), "Access.")}${ring(sc("best-practices"), "Practices")}</div>` +
+    const sc = (k) => Math.round(((c[k] && c[k].score) ?? 0) * 100);
+    const dv = (id) => (a[id] && a[id].displayValue) || "n/a";
+    S.psi = { perf: sc("performance"), seo: sc("seo"), acc: sc("accessibility"), bp: sc("best-practices"), lcp: dv("largest-contentful-paint"), tbt: dv("total-blocking-time"), cls: dv("cumulative-layout-shift") };
+    const m = (id, l) => a[id] ? `<div class="row"><span class="chip ${a[id].score >= .9 ? "ok" : a[id].score >= .5 ? "warn" : "bad"}">${a[id].score >= .9 ? "Good" : a[id].score >= .5 ? "Fix" : "Slow"}</span><div class="t"><b>${l}</b><div class="d">${esc(a[id].displayValue || "")}</div></div></div>` : "";
+    const opps = Object.values(a).filter((x) => x.details && x.details.type === "opportunity" && x.details.overallSavingsMs > 300).sort((x, y) => y.details.overallSavingsMs - x.details.overallSavingsMs).slice(0, 4);
+    box.innerHTML = `<div class="gauges">${gauge(S.psi.perf, "Speed")}${gauge(S.psi.seo, "SEO")}${gauge(S.psi.acc, "Access.")}${gauge(S.psi.bp, "Practices")}</div>` +
       m("largest-contentful-paint", "Largest Contentful Paint") + m("first-contentful-paint", "First Contentful Paint") + m("total-blocking-time", "Total Blocking Time") + m("cumulative-layout-shift", "Layout Shift") + m("speed-index", "Speed Index") +
-      (opps.length ? `<div class="row"><span class="chip info">Tips</span><div class="t"><b>Biggest savings</b><span>${opps.map((o) => esc(o.title) + " (" + (o.details.overallSavingsMs / 1000).toFixed(1) + " s)").join("<br>")}</span></div></div>` : "") +
-      `<p class="hint"><a href="https://pagespeed.web.dev/analysis?url=${encodeURIComponent(url)}&form_factor=mobile" target="_blank" rel="noopener">Open the full report</a></p>`;
-    lastSummary += `\n\nPageSpeed mobile: speed ${sc("performance")}, SEO ${sc("seo")}, accessibility ${sc("accessibility")}, best practices ${sc("best-practices")}. LCP ${a["largest-contentful-paint"]?.displayValue}, TBT ${a["total-blocking-time"]?.displayValue}, CLS ${a["cumulative-layout-shift"]?.displayValue}.`;
+      (opps.length ? `<div class="row"><span class="chip info">Tips</span><div class="t"><b>Biggest savings</b><div class="d">${opps.map((o) => esc(o.title) + " (" + (o.details.overallSavingsMs / 1000).toFixed(1) + " s)").join("<br>")}</div></div></div>` : "") +
+      `<p class="hint"><a href="${web}">Open the full report</a></p>`;
   } catch (e) {
-    box.innerHTML = `<div class="err">${esc(e.message)}. Google limits free requests without a key. Try again in a minute, or <a href="https://pagespeed.web.dev/analysis?url=${encodeURIComponent(url)}&form_factor=mobile" target="_blank" rel="noopener">open it on PageSpeed Insights</a>.</div>`;
+    box.innerHTML = e.message === "quota"
+      ? `<div class="note">Google's shared free speed limit is used up for today. Add your own free key (see "Speed test key" above the audit button) to fix this for good.</div><div class="btns"><a class="btn fill" href="${web}">Run speed test on Google</a></div><p class="hint">The result opens in your browser. The server timing below is still measured by this app.</p>`
+      : `<div class="err">${esc(e.message)}</div><div class="btns"><a class="btn fill" href="${web}">Run speed test on Google</a></div>`;
   }
 }
 
@@ -211,12 +381,14 @@ $("#siteForm").onsubmit = async (e) => {
   try {
     const d = await auditSite(v);
     renderSite(d);
-    runPsi(d.finalUrl);
+    go.textContent = "Checking speed...";
+    await runPsi(d.finalUrl);
   } catch (err) {
     $("#siteOut").innerHTML = `<div class="err">${esc(err.message)}</div>`;
   } finally { go.disabled = false; go.textContent = "Audit website"; }
 };
 
+/* ---------- Business Profile ---------- */
 const GBP_ITEMS = [
   ["Business name matches the real signage", "No keywords added to the name."],
   ["Primary category is the most specific one", "Plus relevant secondary categories."],
@@ -227,11 +399,11 @@ const GBP_ITEMS = [
   ["Description is complete and natural", "Up to 750 characters."],
   ["Services have descriptions", ""],
   ["At least 10 photos, recent ones", "Logo, cover, work, team."],
-  ["Review count and average rating", "Note both numbers."],
+  ["Review count and average rating noted", "Write both numbers in the notes."],
   ["Owner replies to reviews", "Check the last 5."],
   ["Posts or updates in the last 30 days", ""],
   ["Q&A has no unanswered questions", ""],
-  ["Booking, call or message button present", ""]
+  ["Booking, call or message button present", ""],
 ];
 
 $("#gbpForm").onsubmit = async (e) => {
@@ -241,32 +413,61 @@ $("#gbpForm").onsubmit = async (e) => {
   $("#gbpOut").innerHTML = "";
   try {
     const d = await auditGbp(v);
-    const name = d.name || d.title.replace(/ - Google Maps$/, "") || "this business";
-    const key = "gbp:" + (d.cid || name);
+    const key = "gbp:" + (d.cid || d.name || v);
     let saved = {}; try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch {}
-    const q = encodeURIComponent(name);
     $("#gbpOut").innerHTML = `
-      <div class="card"><h2>${esc(name)}</h2>
-        <div class="btns">
-          <a class="btn fill" href="${esc(d.finalUrl)}" target="_blank" rel="noopener">Open profile</a>
-          <a class="btn" href="https://www.google.com/search?q=${q}" target="_blank" rel="noopener">Search the name</a>
-          <a class="btn" href="https://www.google.com/maps/search/${q}" target="_blank" rel="noopener">See nearby rivals</a>
+      <div class="card"><h2>Business</h2>
+        ${d.name ? "" : `<div class="note">The name could not be read from this link. Type it below.</div>`}
+        <label class="field" for="gName">Business name</label>
+        <input type="text" id="gName" value="${esc(saved.name || d.name)}" placeholder="e.g. Berlin Plumbing Co">
+        <label class="field" for="gSearch">Service and city (to find rivals)</label>
+        <input type="text" id="gSearch" value="${esc(saved.search || "")}" placeholder="e.g. plumber Berlin">
+        <div class="btns" style="margin-top:12px">
+          <button class="btn fill" type="button" id="bOpen">Open profile</button>
+          <button class="btn" type="button" id="bName">Search the name</button>
+          <button class="btn" type="button" id="bRiv">Rivals on Maps</button>
+          <button class="btn" type="button" id="bPack">Google results</button>
         </div>
       </div>
-      <div class="card"><h2>Profile checklist</h2><div id="chk"></div>
-        <label for="gbpNotes" style="display:block;margin-top:10px;font-weight:600">Notes for the proposal</label>
-        <textarea id="gbpNotes" rows="4" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit"></textarea>
+      <div class="card"><h2>Profile checklist</h2>
+        <div class="big"><div id="gRing"></div><div><b id="gCount"></b><small>items confirmed good</small></div></div>
+        <div id="chk"></div>
+        <label class="field" for="gbpNotes">Notes for the proposal</label>
+        <textarea id="gbpNotes" rows="4"></textarea>
         <div class="btns" style="margin-top:10px"><button class="btn fill" id="gbpCopy" type="button">Copy checklist result</button></div>
       </div>`;
-    $("#chk").innerHTML = GBP_ITEMS.map((it, i) => `<div class="check"><input type="checkbox" id="c${i}" ${saved["c" + i] ? "checked" : ""}><label for="c${i}">${esc(it[0])}${it[1] ? `<small>${esc(it[1])}</small>` : ""}</label></div>`).join("");
+    $("#chk").innerHTML = GBP_ITEMS.map((it, i) => `<div class="check${i ? "" : " first"}"><input type="checkbox" id="c${i}" ${saved["c" + i] ? "checked" : ""}><label for="c${i}">${esc(it[0])}${it[1] ? `<small>${esc(it[1])}</small>` : ""}</label></div>`).join("");
     $("#gbpNotes").value = saved.notes || "";
-    const save = () => { const o = { notes: $("#gbpNotes").value }; GBP_ITEMS.forEach((_, i) => (o["c" + i] = $("#c" + i).checked)); try { localStorage.setItem(key, JSON.stringify(o)); } catch {} };
-    $("#gbpOut").addEventListener("input", save);
-    $("#gbpCopy").onclick = async () => {
-      const txt = `Business Profile review: ${name}\n` + GBP_ITEMS.map((it, i) => `${$("#c" + i).checked ? "[ok]" : "[fix]"} ${it[0]}`).join("\n") + `\n\nNotes: ${$("#gbpNotes").value}`;
-      const b = $("#gbpCopy");
-      try { await navigator.clipboard.writeText(txt); b.textContent = "Copied"; } catch { b.textContent = "Copy not allowed here"; }
-      setTimeout(() => (b.textContent = "Copy checklist result"), 2500);
+    const nm = () => $("#gName").value.trim();
+    const sr = () => $("#gSearch").value.trim();
+    const g = (qs) => openExt("https://www.google.com/search?q=" + encodeURIComponent(qs));
+    const refresh = () => {
+      const done = GBP_ITEMS.filter((_, i) => $("#c" + i).checked).length;
+      const pct = Math.round(done / GBP_ITEMS.length * 100);
+      $("#gRing").innerHTML = gauge(pct, "Done");
+      $("#gCount").textContent = `${done} of ${GBP_ITEMS.length}`;
+      const o = { name: nm(), search: sr(), notes: $("#gbpNotes").value };
+      GBP_ITEMS.forEach((_, i) => (o["c" + i] = $("#c" + i).checked));
+      try { localStorage.setItem(key, JSON.stringify(o)); } catch {}
+    };
+    refresh();
+    $("#gbpOut").addEventListener("input", refresh);
+    $("#bOpen").onclick = () => openExt(d.finalUrl || d.raw);
+    $("#bName").onclick = () => { if (!nm()) return $("#gName").focus(); g(nm()); };
+    $("#bPack").onclick = () => { if (!sr()) return $("#gSearch").focus(); g(sr()); };
+    $("#bRiv").onclick = () => {
+      if (!sr()) return $("#gSearch").focus();
+      const at = d.coords.length === 2 ? `/@${d.coords[0]},${d.coords[1]},13z` : "";
+      openExt("https://www.google.com/maps/search/" + encodeURIComponent(sr()) + at);
+    };
+    $("#gbpCopy").onclick = () => {
+      const lines = [`BUSINESS PROFILE REVIEW: ${nm() || "business"}`, `Date: ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}`, ""];
+      const fix = GBP_ITEMS.filter((_, i) => !$("#c" + i).checked), good = GBP_ITEMS.filter((_, i) => $("#c" + i).checked);
+      lines.push(`Score: ${good.length} of ${GBP_ITEMS.length} good`);
+      if (fix.length) { lines.push("", "FIX FIRST"); fix.forEach((it, i) => lines.push(`${i + 1}. ${it[0]}`)); }
+      if (good.length) { lines.push("", "WORKING WELL"); lines.push(good.map((it) => it[0]).join("; ")); }
+      if ($("#gbpNotes").value.trim()) lines.push("", "Notes: " + $("#gbpNotes").value.trim());
+      copyText(lines.join("\n"), $("#gbpCopy"), "Copy checklist result");
     };
   } catch (err) {
     $("#gbpOut").innerHTML = `<div class="err">${esc(err.message)}</div>`;
