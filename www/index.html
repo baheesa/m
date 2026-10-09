@@ -1,1 +1,277 @@
-x
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Proposal Audit</title>
+<style>
+:root{
+  --bg:#f3f7f2; --card:#ffffff; --ink:#10261a; --muted:#587062; --line:#d6e2d8;
+  --forest:#1f5a3a; --lime:#a6e22e; --dark:#0d3b26;
+  --ok:#1f8a4c; --warn:#b7791f; --bad:#c0392b;
+  --okbg:#e2f4e8; --warnbg:#fbf0d9; --badbg:#fbe4e1;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#0b1a12; --card:#12271b; --ink:#e6f1e8; --muted:#92ab9a; --line:#244433; --forest:#6fcf97; --lime:#b6f04a; --dark:#06130c;
+    --ok:#6fcf97; --warn:#f0b954; --bad:#ff8a7a; --okbg:#143524; --warnbg:#3a2f12; --badbg:#3e1a16; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px 56px}
+header{background:var(--dark);color:#eaf6ec;padding:28px 16px 22px;margin:0 0 16px}
+header .in{max-width:640px;margin:0 auto}
+header h1{margin:0 0 4px;font-size:1.5rem;letter-spacing:-.01em}
+header p{margin:0;color:#a9c9b4;font-size:.95rem}
+header b{color:var(--lime)}
+.tabs{display:flex;gap:8px;margin:0 0 14px}
+.tabs button{flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:600}
+.tabs button[aria-selected=true]{background:var(--forest);border-color:var(--forest);color:#fff}
+@media (prefers-color-scheme:dark){.tabs button[aria-selected=true]{color:#06130c}}
+form{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+input[type=text]{width:100%;padding:14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+input:focus,button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+.go{padding:14px;border:0;border-radius:10px;background:var(--lime);color:#10261a;font:inherit;font-weight:700}
+.go[disabled]{opacity:.6}
+.hint{color:var(--muted);font-size:.85rem;margin:2px 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px}
+.card h2{margin:0 0 10px;font-size:1.05rem}
+.scores{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.score{text-align:center}
+.ring{width:100%;aspect-ratio:1;max-width:76px;margin:0 auto 4px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.ring.ok{background:var(--okbg);color:var(--ok)} .ring.warn{background:var(--warnbg);color:var(--warn)} .ring.bad{background:var(--badbg);color:var(--bad)} .ring.na{background:var(--line);color:var(--muted)}
+.score small{color:var(--muted);font-size:.72rem;display:block}
+.row{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.chip{flex:none;min-width:54px;text-align:center;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:4px 6px;border-radius:6px;margin-top:2px}
+.chip.ok{background:var(--okbg);color:var(--ok)} .chip.warn{background:var(--warnbg);color:var(--warn)} .chip.bad{background:var(--badbg);color:var(--bad)} .chip.info{background:var(--line);color:var(--muted)}
+.row .t{min-width:0;flex:1}
+.row .t b{display:block;font-size:.95rem}
+.row .t span{color:var(--muted);font-size:.88rem;overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tag{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.82rem}
+.err{background:var(--badbg);color:var(--bad);border-radius:10px;padding:12px;margin:10px 0}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-block;padding:11px 14px;border-radius:10px;border:1.5px solid var(--forest);color:var(--forest);background:transparent;font:inherit;font-weight:600;text-decoration:none}
+.btn.fill{background:var(--forest);color:#fff}
+@media (prefers-color-scheme:dark){.btn.fill{color:#06130c}}
+details{margin-top:8px} summary{cursor:pointer;color:var(--forest);font-weight:600}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:.8rem;margin:8px 0 0}
+.check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.check:first-of-type{border-top:0}
+.check input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--forest)}
+.check label{min-width:0}
+.check small{display:block;color:var(--muted)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <h1>Proposal <b>Audit</b></h1>
+  <p>Paste a website or Google Business Profile link. Get the facts for your proposal.</p>
+</div></header>
+
+<div class="wrap">
+  <div class="tabs" role="tablist">
+    <button role="tab" id="tabSite" aria-selected="true">Website</button>
+    <button role="tab" id="tabGbp" aria-selected="false">Business Profile</button>
+  </div>
+
+  <section id="siteView">
+    <form id="siteForm">
+      <input type="text" id="siteUrl" inputmode="url" autocapitalize="off" autocorrect="off" placeholder="example.com" aria-label="Website address">
+      <button class="go" id="siteGo" type="submit">Audit website</button>
+    </form>
+    <p class="hint">Reads the page, robots.txt and sitemap, then runs Google PageSpeed on mobile. Speed takes 15 to 40 seconds.</p>
+    <div id="siteOut"></div>
+  </section>
+
+  <section id="gbpView" hidden>
+    <form id="gbpForm">
+      <input type="text" id="gbpUrl" inputmode="url" autocapitalize="off" autocorrect="off" placeholder="Paste the Google Maps / Business Profile link" aria-label="Business Profile link">
+      <button class="go" id="gbpGo" type="submit">Open profile review</button>
+    </form>
+    <p class="hint">Google does not give free access to profile data, so this reads the business name from the link and gives you a checklist to tick while the profile is open.</p>
+    <div id="gbpOut"></div>
+  </section>
+</div>
+
+<script src="audit-client.js"></script>
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+let lastSummary = "";
+
+function showTab(site) {
+  $("#siteView").hidden = !site; $("#gbpView").hidden = site;
+  $("#tabSite").setAttribute("aria-selected", site); $("#tabGbp").setAttribute("aria-selected", !site);
+}
+$("#tabSite").onclick = () => showTab(true);
+$("#tabGbp").onclick = () => showTab(false);
+
+const row = (lvl, title, detail) =>
+  `<div class="row"><span class="chip ${lvl}">${{ ok: "Good", warn: "Fix", bad: "Missing", info: "Info" }[lvl]}</span><div class="t"><b>${esc(title)}</b><span>${detail}</span></div></div>`;
+const cls = (n) => (n >= 90 ? "ok" : n >= 50 ? "warn" : "bad");
+
+function renderSite(d) {
+  const p = d.page, notes = [];
+  const add = (lvl, title, detail, plain) => { notes.push(row(lvl, title, detail)); lines.push(`[${lvl.toUpperCase()}] ${title}: ${plain ?? detail.replace(/<[^>]+>/g, "")}`); };
+  const lines = [`Audit of ${d.finalUrl}`];
+
+  const A = [], B = [], C = [], D = [];
+  const target = (arr) => (lvl, t, det, plain) => { const before = notes.length; add(lvl, t, det, plain); arr.push(notes.pop()); };
+  const meta = target(A), struct = target(B), tech = target(C), schemaR = target(D);
+
+  // Meta
+  p.titleLen === 0 ? meta("bad", "Title tag", "No title found.") :
+    meta(p.titleLen >= 30 && p.titleLen <= 60 ? "ok" : "warn", "Title tag", `${esc(p.title)}<br>${p.titleLen} characters. Aim for 30 to 60.`, `"${p.title}" (${p.titleLen} chars, aim 30-60)`);
+  !p.description ? meta("bad", "Meta description", "No meta description.") :
+    meta(p.descriptionLen >= 70 && p.descriptionLen <= 160 ? "ok" : "warn", "Meta description", `${esc(p.description)}<br>${p.descriptionLen} characters. Aim for 70 to 160.`, `${p.descriptionLen} chars, aim 70-160`);
+  meta(p.keywordsMeta ? "info" : "info", "Meta keywords", p.keywordsMeta ? esc(p.keywordsMeta) : "None. Google ignores this tag, so it is not a problem.", p.keywordsMeta || "none (Google ignores it)");
+  const topPhrase = (p.keywords.phrases[0] || p.keywords.single[0] || {}).term;
+  const inTitle = topPhrase && p.title.toLowerCase().includes(topPhrase.split(" ")[0]);
+  meta(topPhrase ? (inTitle ? "ok" : "warn") : "info", "Likely focus keyword",
+    topPhrase ? `<div class="tags">${[...p.keywords.phrases.slice(0, 4), ...p.keywords.single.slice(0, 5)].map((k) => `<span class="tag">${esc(k.term)}</span>`).join("")}</div>${inTitle ? "" : "<br>The top term is not in the title."}` : "Not enough text to tell.",
+    topPhrase ? `top terms: ${p.keywords.phrases.slice(0, 3).concat(p.keywords.single.slice(0, 3)).map((k) => k.term).join(", ")}${inTitle ? "" : " (not in title)"}` : "n/a");
+  meta(p.canonical ? "ok" : "warn", "Canonical tag", p.canonical ? esc(p.canonical) : "Missing.", p.canonical || "missing");
+  meta(p.robotsMeta && /noindex/i.test(p.robotsMeta) ? "bad" : "ok", "Robots meta", p.robotsMeta ? esc(p.robotsMeta) : "No tag, so the page can be indexed.", p.robotsMeta || "none, indexable");
+  meta(p.og["og:title"] && p.og["og:image"] ? "ok" : "warn", "Social preview tags", `og:title ${p.og["og:title"] ? "yes" : "no"}, og:description ${p.og["og:description"] ? "yes" : "no"}, og:image ${p.og["og:image"] ? "yes" : "no"}, twitter card ${p.twitterCard ? "yes" : "no"}`);
+
+  // Structure
+  struct(p.headings.h1 === 1 ? "ok" : p.headings.h1 === 0 ? "bad" : "warn", "H1 heading", p.headings.h1 === 1 ? esc(p.h1s[0]) : p.headings.h1 === 0 ? "No H1 on the page." : `${p.headings.h1} H1s found. Use one.`, `${p.headings.h1} H1`);
+  struct("info", "Heading counts", `H1 ${p.headings.h1}, H2 ${p.headings.h2}, H3 ${p.headings.h3}, H4 ${p.headings.h4}`);
+  if (p.headingList.length) struct("info", "Outline", p.headingList.map((h) => `${h.level === 2 ? "&nbsp;&nbsp;&nbsp;" : ""}H${h.level} ${esc(h.text)}`).join("<br>"), "see page outline");
+  struct(p.words >= 300 ? "ok" : "warn", "Text on page", `About ${p.words} words. ${p.words < 300 ? "Thin for a service page." : ""}`, `${p.words} words`);
+  struct(p.images.total && p.images.missingAlt ? "warn" : "ok", "Images", `${p.images.total} images, ${p.images.missingAlt} without alt text, ${p.images.lazy} lazy loaded.`, `${p.images.total} imgs, ${p.images.missingAlt} missing alt`);
+  struct(p.links.internal >= 3 ? "ok" : "warn", "Links", `${p.links.internal} internal, ${p.links.external} external. Tap-to-call links: ${p.links.tel}.`, `${p.links.internal} internal, ${p.links.external} external, ${p.links.tel} tel links`);
+  struct(p.nap.phone && p.nap.address ? "ok" : "warn", "Phone and address on page", `Phone ${p.nap.phone ? "found" : "not found"}, address wording ${p.nap.address ? "found" : "not found"}. Should match the Business Profile exactly.`, `phone ${p.nap.phone ? "yes" : "no"}, address ${p.nap.address ? "yes" : "no"}`);
+
+  // Technical
+  tech(d.https ? "ok" : "bad", "HTTPS", d.https ? "Site uses HTTPS." : "Site is not on HTTPS.");
+  if (d.httpRedirectsToHttps !== null) tech(d.httpRedirectsToHttps ? "ok" : "warn", "HTTP to HTTPS redirect", d.httpRedirectsToHttps ? "Redirects correctly." : "http:// version does not redirect to https://.");
+  tech(p.viewport ? "ok" : "bad", "Mobile viewport", p.viewport ? esc(p.viewport) : "No viewport tag. The page will not scale on phones.");
+  tech(p.lang ? "ok" : "warn", "Language attribute", p.lang ? esc(p.lang) : "No lang on the html tag.");
+  tech(p.favicon ? "ok" : "warn", "Favicon", p.favicon ? "Found." : "Not found.");
+  tech(d.server.responseMs < 800 ? "ok" : d.server.responseMs < 1800 ? "warn" : "bad", "Server response", `${d.server.responseMs} ms to get the page, ${d.server.htmlKb} KB of HTML, ${d.server.compressed ? "compressed" : "not compressed"}.`, `${d.server.responseMs} ms, ${d.server.htmlKb} KB html`);
+  tech(d.robots.found ? (d.robots.disallowAll ? "bad" : "ok") : "warn", "robots.txt", d.robots.found ? (d.robots.disallowAll ? "Blocks all crawlers." : `Found. ${d.robots.disallows} disallow rules.`) + `<details><summary>View file</summary><pre>${esc((d.robots.preview || []).join("\n"))}</pre></details>` : "Not found.", d.robots.found ? "found" : "missing");
+  tech(d.sitemap.found || (d.robots.sitemaps || []).length ? "ok" : "warn", "Sitemap", d.sitemap.found ? `${d.sitemap.url} (${d.sitemap.urls} entries)` : (d.robots.sitemaps || []).length ? esc(d.robots.sitemaps[0]) : "No sitemap.xml found.", d.sitemap.found ? `found, ${d.sitemap.urls} entries` : "missing");
+
+  // Schema
+  const s = p.schema, localTypes = ["LocalBusiness", "Organization", "Plumber", "Electrician", "HVACBusiness", "HomeAndConstructionBusiness", "RoofingContractor", "GeneralContractor", "ProfessionalService", "Store", "Service"];
+  const hasLocal = s.types.some((t) => localTypes.includes(t) || /Business|Contractor/.test(t));
+  schemaR(s.blocks || s.microdata ? "ok" : "bad", "Structured data", s.blocks || s.microdata ? `${s.blocks} JSON-LD block${s.blocks === 1 ? "" : "s"}${s.microdata ? " plus microdata" : ""}. ${s.invalid ? s.invalid + " could not be parsed." : ""}<div class="tags">${s.types.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>` : "No schema markup found.", s.types.length ? "types: " + s.types.join(", ") : "none");
+  schemaR(hasLocal ? "ok" : "warn", "Local business schema", hasLocal ? "A business type is present." : "No LocalBusiness or similar type. A strong proposal point for a local specialist.", hasLocal ? "present" : "missing");
+  schemaR(s.types.includes("FAQPage") ? "ok" : "info", "FAQ schema", s.types.includes("FAQPage") ? "Present." : "Not present.");
+  schemaR("info", "Validate", `<a href="https://search.google.com/test/rich-results?url=${encodeURIComponent(d.finalUrl)}" target="_blank" rel="noopener">Open Rich Results Test for this page</a>`, "run Rich Results Test");
+
+  $("#siteOut").innerHTML = `
+    <div class="card"><h2>Speed (mobile, Google PageSpeed)</h2><div id="psi"><p class="hint">Running. Keep this tab open.</p></div></div>
+    <div class="card"><h2>Meta and keywords</h2>${A.join("")}</div>
+    <div class="card"><h2>Page structure</h2>${B.join("")}</div>
+    <div class="card"><h2>Schema</h2>${D.join("")}</div>
+    <div class="card"><h2>Technical</h2>${C.join("")}</div>
+    <div class="btns"><button class="btn fill" id="copyBtn">Copy summary</button></div>`;
+  lastSummary = lines.join("\n");
+  $("#copyBtn").onclick = copySummary;
+}
+
+async function copySummary() {
+  const b = $("#copyBtn");
+  try { await navigator.clipboard.writeText(lastSummary); b.textContent = "Copied"; }
+  catch { const pre = document.createElement("pre"); pre.textContent = lastSummary; b.after(pre); b.textContent = "Select the text below"; }
+  setTimeout(() => (b.textContent = "Copy summary"), 2500);
+}
+
+async function runPsi(url) {
+  const box = $("#psi");
+  const q = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&category=performance&category=seo&category=accessibility&category=best-practices&url=" + encodeURIComponent(url);
+  try {
+    const r = await fetch(q);
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error?.message || "PageSpeed request failed");
+    const c = j.lighthouseResult.categories, a = j.lighthouseResult.audits;
+    const sc = (k) => Math.round((c[k]?.score ?? 0) * 100);
+    const ring = (n, l) => `<div class="score"><div class="ring ${cls(n)}">${n}</div><small>${l}</small></div>`;
+    const m = (id, l) => a[id] ? `<div class="row"><span class="chip ${a[id].score >= .9 ? "ok" : a[id].score >= .5 ? "warn" : "bad"}">${a[id].score >= .9 ? "Good" : a[id].score >= .5 ? "Fix" : "Slow"}</span><div class="t"><b>${l}</b><span>${esc(a[id].displayValue || "")}</span></div></div>` : "";
+    const opps = Object.values(a).filter((x) => x.details?.type === "opportunity" && x.details.overallSavingsMs > 300).sort((x, y) => y.details.overallSavingsMs - x.details.overallSavingsMs).slice(0, 4);
+    box.innerHTML = `<div class="scores">${ring(sc("performance"), "Speed")}${ring(sc("seo"), "SEO")}${ring(sc("accessibility"), "Access.")}${ring(sc("best-practices"), "Practices")}</div>` +
+      m("largest-contentful-paint", "Largest Contentful Paint") + m("first-contentful-paint", "First Contentful Paint") + m("total-blocking-time", "Total Blocking Time") + m("cumulative-layout-shift", "Layout Shift") + m("speed-index", "Speed Index") +
+      (opps.length ? `<div class="row"><span class="chip info">Tips</span><div class="t"><b>Biggest savings</b><span>${opps.map((o) => esc(o.title) + " (" + (o.details.overallSavingsMs / 1000).toFixed(1) + " s)").join("<br>")}</span></div></div>` : "") +
+      `<p class="hint"><a href="https://pagespeed.web.dev/analysis?url=${encodeURIComponent(url)}&form_factor=mobile" target="_blank" rel="noopener">Open the full report</a></p>`;
+    lastSummary += `\n\nPageSpeed mobile: speed ${sc("performance")}, SEO ${sc("seo")}, accessibility ${sc("accessibility")}, best practices ${sc("best-practices")}. LCP ${a["largest-contentful-paint"]?.displayValue}, TBT ${a["total-blocking-time"]?.displayValue}, CLS ${a["cumulative-layout-shift"]?.displayValue}.`;
+  } catch (e) {
+    box.innerHTML = `<div class="err">${esc(e.message)}. Google limits free requests without a key. Try again in a minute, or <a href="https://pagespeed.web.dev/analysis?url=${encodeURIComponent(url)}&form_factor=mobile" target="_blank" rel="noopener">open it on PageSpeed Insights</a>.</div>`;
+  }
+}
+
+$("#siteForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const v = $("#siteUrl").value.trim(); if (!v) return;
+  const go = $("#siteGo"); go.disabled = true; go.textContent = "Checking...";
+  $("#siteOut").innerHTML = "";
+  try {
+    const d = await auditSite(v);
+    renderSite(d);
+    runPsi(d.finalUrl);
+  } catch (err) {
+    $("#siteOut").innerHTML = `<div class="err">${esc(err.message)}</div>`;
+  } finally { go.disabled = false; go.textContent = "Audit website"; }
+};
+
+const GBP_ITEMS = [
+  ["Business name matches the real signage", "No keywords added to the name."],
+  ["Primary category is the most specific one", "Plus relevant secondary categories."],
+  ["Phone and address match the website exactly", "Same format everywhere."],
+  ["Website link works and goes to the right page", ""],
+  ["Opening hours are filled in, with holiday hours", ""],
+  ["Service areas or service list added", "Important for home services."],
+  ["Description is complete and natural", "Up to 750 characters."],
+  ["Services have descriptions", ""],
+  ["At least 10 photos, recent ones", "Logo, cover, work, team."],
+  ["Review count and average rating", "Note both numbers."],
+  ["Owner replies to reviews", "Check the last 5."],
+  ["Posts or updates in the last 30 days", ""],
+  ["Q&A has no unanswered questions", ""],
+  ["Booking, call or message button present", ""]
+];
+
+$("#gbpForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const v = $("#gbpUrl").value.trim(); if (!v) return;
+  const go = $("#gbpGo"); go.disabled = true; go.textContent = "Reading link...";
+  $("#gbpOut").innerHTML = "";
+  try {
+    const d = await auditGbp(v);
+    const name = d.name || d.title.replace(/ - Google Maps$/, "") || "this business";
+    const key = "gbp:" + (d.cid || name);
+    let saved = {}; try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch {}
+    const q = encodeURIComponent(name);
+    $("#gbpOut").innerHTML = `
+      <div class="card"><h2>${esc(name)}</h2>
+        <div class="btns">
+          <a class="btn fill" href="${esc(d.finalUrl)}" target="_blank" rel="noopener">Open profile</a>
+          <a class="btn" href="https://www.google.com/search?q=${q}" target="_blank" rel="noopener">Search the name</a>
+          <a class="btn" href="https://www.google.com/maps/search/${q}" target="_blank" rel="noopener">See nearby rivals</a>
+        </div>
+      </div>
+      <div class="card"><h2>Profile checklist</h2><div id="chk"></div>
+        <label for="gbpNotes" style="display:block;margin-top:10px;font-weight:600">Notes for the proposal</label>
+        <textarea id="gbpNotes" rows="4" style="width:100%;padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit"></textarea>
+        <div class="btns" style="margin-top:10px"><button class="btn fill" id="gbpCopy" type="button">Copy checklist result</button></div>
+      </div>`;
+    $("#chk").innerHTML = GBP_ITEMS.map((it, i) => `<div class="check"><input type="checkbox" id="c${i}" ${saved["c" + i] ? "checked" : ""}><label for="c${i}">${esc(it[0])}${it[1] ? `<small>${esc(it[1])}</small>` : ""}</label></div>`).join("");
+    $("#gbpNotes").value = saved.notes || "";
+    const save = () => { const o = { notes: $("#gbpNotes").value }; GBP_ITEMS.forEach((_, i) => (o["c" + i] = $("#c" + i).checked)); try { localStorage.setItem(key, JSON.stringify(o)); } catch {} };
+    $("#gbpOut").addEventListener("input", save);
+    $("#gbpCopy").onclick = async () => {
+      const txt = `Business Profile review: ${name}\n` + GBP_ITEMS.map((it, i) => `${$("#c" + i).checked ? "[ok]" : "[fix]"} ${it[0]}`).join("\n") + `\n\nNotes: ${$("#gbpNotes").value}`;
+      const b = $("#gbpCopy");
+      try { await navigator.clipboard.writeText(txt); b.textContent = "Copied"; } catch { b.textContent = "Copy not allowed here"; }
+      setTimeout(() => (b.textContent = "Copy checklist result"), 2500);
+    };
+  } catch (err) {
+    $("#gbpOut").innerHTML = `<div class="err">${esc(err.message)}</div>`;
+  } finally { go.disabled = false; go.textContent = "Open profile review"; }
+};
+</script>
+</body>
+</html>
