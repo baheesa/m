@@ -94,17 +94,20 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px 
 .field{display:block;margin:8px 0 4px;font-weight:600;font-size:.9rem}
 [hidden]{display:none!important}
 </style>
+<link rel="stylesheet" href="proposal.css">
 </head>
 <body>
 <header><div class="in">
   <h1>Proposal <b>Audit</b></h1>
-  <p>Paste a website or Google Business Profile link. Get the facts for your proposal.</p>
+  <p>Audit his site. Write the proposal that fits him.</p>
 </div></header>
 
 <div class="wrap">
   <div class="tabs" role="tablist">
     <button role="tab" id="tabSite" aria-selected="true">Website</button>
-    <button role="tab" id="tabGbp" aria-selected="false">Business Profile</button>
+    <button role="tab" id="tabGbp" aria-selected="false">Profile</button>
+    <button role="tab" id="tabProp" aria-selected="false">Proposal</button>
+    <button role="tab" id="tabBook" aria-selected="false">Playbook</button>
   </div>
 
   <section id="siteView">
@@ -130,6 +133,9 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border:1px 
     <p class="hint">Google gives no free profile data, so this reads the name from your link and gives you a checklist to tick while the profile is open.</p>
     <div id="gbpOut"></div>
   </section>
+
+  <section id="propView" hidden></section>
+  <section id="bookView" hidden></section>
 </div>
 
 <script src="audit-client.js"></script>
@@ -169,12 +175,11 @@ async function copyText(txt, btn, label) {
 }
 
 /* ---------- tabs ---------- */
-function showTab(site) {
-  $("#siteView").hidden = !site; $("#gbpView").hidden = site;
-  $("#tabSite").setAttribute("aria-selected", site); $("#tabGbp").setAttribute("aria-selected", !site);
+const TABS = { site: ["tabSite", "siteView"], gbp: ["tabGbp", "gbpView"], prop: ["tabProp", "propView"], book: ["tabBook", "bookView"] };
+function showTab(n) {
+  Object.entries(TABS).forEach(([k, [t, v]]) => { $("#" + v).hidden = k !== n; $("#" + t).setAttribute("aria-selected", k === n); });
 }
-$("#tabSite").onclick = () => showTab(true);
-$("#tabGbp").onclick = () => showTab(false);
+Object.entries(TABS).forEach(([k, [t]]) => ($("#" + t).onclick = () => showTab(k)));
 
 /* ---------- PageSpeed key ---------- */
 try { $("#psiKey").value = localStorage.getItem("psiKey") || ""; } catch {}
@@ -322,7 +327,7 @@ function renderSite(d) {
       <div class="stack"><i style="width:${n.ok / tot * 100}%;background:var(--ok)"></i><i style="width:${n.warn / tot * 100}%;background:var(--warn)"></i><i style="width:${n.bad / tot * 100}%;background:var(--bad)"></i></div>
       <div class="legend"><span><i class="dot" style="background:var(--ok)"></i><b>${n.ok}</b> good</span><span><i class="dot" style="background:var(--warn)"></i><b>${n.warn}</b> to fix</span><span><i class="dot" style="background:var(--bad)"></i><b>${n.bad}</b> missing</span></div>
       ${fixList.length ? `<h3>Fix first</h3>${fixList.map((i, k) => rowHtml({ ...i, html: esc(i.plain) }, k === 0)).join("")}` : ""}
-      <div class="btns" style="margin-top:12px"><button class="btn fill" id="copyBtn" type="button">Copy summary</button></div>
+      <div class="btns" style="margin-top:12px"><button class="btn fill" id="copyBtn" type="button">Copy summary</button><button class="btn" id="toProp" type="button">Write proposal for this site</button></div>
     </div>
     <div class="filters" role="group" aria-label="Filter">
       <button type="button" data-f="all" aria-pressed="true">All</button>${CATS.map(([k, nm]) => `<button type="button" data-f="${k}" aria-pressed="false">${nm}</button>`).join("")}
@@ -334,6 +339,7 @@ function renderSite(d) {
     ${section("offpage", "Off-page", offLinks)}`;
 
   $("#copyBtn").onclick = () => copyText(buildSummary(), $("#copyBtn"), "Copy summary");
+  $("#toProp").onclick = () => { if (window.PA_fromAudit) window.PA_fromAudit(d.finalUrl); };
   document.querySelectorAll(".filters button").forEach((b) => (b.onclick = () => {
     document.querySelectorAll(".filters button").forEach((x) => x.setAttribute("aria-pressed", x === b));
     const f = b.dataset.f;
@@ -474,5 +480,7 @@ $("#gbpForm").onsubmit = async (e) => {
   } finally { go.disabled = false; go.textContent = "Open profile review"; }
 };
 </script>
+<script src="seeds.js"></script>
+<script src="proposal.js"></script>
 </body>
 </html>
